@@ -4,7 +4,7 @@ Cleaning Data in SQL Queries
 
 SELECT *
 FROM nashville_housing_data_1;
---------------------------------------------------------------------------------------
+----------------------------------
 --Populate Property Address: Replacing null values on Propertyaddress where address can 
 --be found elsewhere in same table
 
@@ -30,7 +30,7 @@ AND a.uniqueid <> b.uniqueid
 AND a.propertyaddress IS NULL;
 
 
---------------------------------------------------------------------------------------
+------------------------------------------
 -- Breaking out Address into Individual Columns (Address, City, State)
 
 SELECT PropertyAddress
@@ -79,7 +79,7 @@ Select *
 FROM nashville_housing_data_1
 ORDER BY parcelid;
 
--------------------------------------------------------------------------------------
+--------------------------------------
 -- Change 'Y' and 'N' to 'Yes' and 'No' in "Sold as Vacant" field
 
 SELECT Distinct(SoldAsVacant), Count(SoldAsVacant)
@@ -100,7 +100,7 @@ SET SoldAsVacant = CASE WHEN SoldAsVacant = 'Y' THEN 'Yes'
 	   ELSE SoldAsVacant
 	   END;
 
-----------------------------------------------------------------------------------------
+--------------------------------------
 -- Remove Duplicates
 
 WITH cte 
@@ -108,11 +108,11 @@ AS
 (
 SELECT ctid,
 	ROW_NUMBER() OVER(PARTITION BY 
-					 ParcelID,
-				 	PropertyAddress,
-             		SalePrice,
-             		SaleDate,
-             		LegalReference
+		ParcelID,
+		PropertyAddress,
+             	SalePrice,
+             	SaleDate,
+             	LegalReference
              	ORDER BY UniqueID) AS row_num
 FROM nashville_housing_data_1
 )
@@ -126,7 +126,7 @@ DELETE FROM
 SELECT *
 FROM nashville_housing_data_1;
 
---------------------------------------------------------------------------------------
+----------------------------------
 -- Delete Unused Columns
 
 Select *
