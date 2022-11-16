@@ -15,7 +15,7 @@ CREATE TABLE meat_poultry_egg_establishments_new (
 );
 
 COPY meat_poultry_egg_establishments_new
-FROM '/Users/hollysongster/Desktop/MPI_Directory_by_Establishment_Number_0.csv'
+FROM '/Users/Desktop/MPI_Directory_by_Establishment_Number_0.csv'
 WITH (FORMAT CSV, HEADER);
 
 CREATE INDEX company_new_idx ON meat_poultry_egg_establishments_new (company);
