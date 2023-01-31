@@ -1,0 +1,98 @@
+--To Upload and Create New Table for Analysis
+
+CREATE TABLE TH_Materials (
+	Item_ID numeric PRIMARY KEY,
+	Purchase_Date date,
+	Vendor varchar(50),
+    Vendor_Type varchar(25),
+	Category varchar(25),
+    Category_Type varchar(25),
+	Room varchar(25),
+	Item_Description text,
+	Cost numeric);
+	
+COPY TH_Materials
+FROM '/Users/hollysongster/Desktop/Desktop - Holly’s iMac/TH_Data_Final_SQL.csv'
+WITH (FORMAT CSV, HEADER);	
+
+--Check to make sure everything was copied into new table
+SELECT *
+FROM TH_Materials
+
+--Analysis
+
+--How much did the Tiny House Cost (Total)?
+SELECT SUM(Cost) AS Total
+FROM TH_Materials
+
+"total"
+36772.21
+
+--How much and and what percentage of the build was spent at each Vendor?
+WITH cte AS(
+	SELECT
+		Vendor,
+		SUM(Cost) AS Sum_Cost
+	FROM TH_Materials
+	GROUP BY Vendor
+	)
+SELECT 
+	Vendor,
+	Sum_Cost,
+	100 * sum_cost/SUM(sum_cost) OVER () AS Percentage
+FROM cte;
+
+--How much did we spend at each Vendor_Type and what is the percentage break down of Vendor_Type?
+
+WITH cte AS(
+	SELECT
+		Vendor_type,
+		SUM(Cost) AS Sum_Cost
+	FROM TH_Materials
+	GROUP BY Vendor_type
+	)
+SELECT 
+	Vendor_type,
+	Sum_Cost,
+	100 * sum_cost/SUM(sum_cost) OVER () AS Percentage
+FROM cte;
+
+--What were the top 5 most expensive items?
+SELECT Item_Description, Cost
+FROM TH_Materials
+ORDER BY cost DESC
+LIMIT 5;
+
+--What was the most and least expensive items?
+SELECT MAX(Cost), Min(Cost)
+FROM TH_Materials	
+
+--What the most expensve room?
+SELECT Room, SUM(Cost) AS Total_Spent_Room
+FROM TH_Materials
+GROUP BY Room
+ORDER BY Total_Spent_Room DESC
+LIMIT 5;
+
+--How much did we spend on 4x4's?
+SELECT sum(cost) AS Total_Spent_4x4
+FROM TH_Materials
+WHERE item_description LIKE '%4x4%';
+
+--How much did we spend on wood?
+SELECT sum(cost) AS Total_Spent_Wood
+FROM TH_Materials
+WHERE item_description LIKE '%wood%';
+
+--What rows are listed within the Exterior Elements Category
+SELECT DISTINCT Category_Type
+FROM TH_Materials
+WHERE Category = 'Exterior Elements'
+ORDER BY Category_Type
+
+--How much did we spent in 2017?
+SELECT SUM(Cost)
+FROM TH_Materials
+WHERE Purchase_Date BETWEEN '2017-01-01' AND '2017-12-31' 
+
+
