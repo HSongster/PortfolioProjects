@@ -164,7 +164,7 @@ ORDER BY TotalDeathCount DESC;
 
 -- 1. 
 
-SELECT SUM(new_cases) AS total_cases, SUM(cast(new_deaths AS int)) AS total_deaths, SUM(cast(new_deaths ASint))/SUM(New_Cases)*100 AS DeathPercentage
+SELECT SUM(new_cases) AS total_cases, SUM(CAST(new_deaths AS int)) AS total_deaths, SUM(CAST(new_deaths AS int))/SUM(New_Cases)*100 AS DeathPercentage
 From public.working_covid_deaths
 --Where location like '%states%'
 WHERE continent IS NOT null 
@@ -188,11 +188,11 @@ ORDER BY 1,2;
 -- I took these out as they are not inluded in the above queries and want to stay consistent
 -- European Union is part of Europe
 
-SELECT location, SUM(cast(new_deaths AS int)) AS TotalDeathCount
+SELECT location, SUM(CAST(new_deaths AS int)) AS TotalDeathCount
 FROM public.working_covid_deaths
 --Where location like '%states%'
 WHERE continent IS null 
-AND location NOT IN ('World', 'European Union', 'International')
+AND location NOT IN ('World', 'European Union', 'International', 'High income', 'Upper middle income', 'Lower middle income', 'Low income')
 GROUP BY location
 ORDER BY TotalDeathCount DESC;
 
@@ -209,8 +209,8 @@ ORDER BY PercentPopulationInfected DESC;
 -- 4.
 
 
-SELECT Location, Population,date, MAX(total_cases) AS HighestInfectionCount,  Max((total_cases/population))*100 AS PercentPopulationInfected
+SELECT Location, Population, Entry_date, MAX(total_cases) AS HighestInfectionCount,  Max((total_cases/population))*100 AS PercentPopulationInfected
 FROM public.working_covid_deaths
 --Where location like '%states%'
-GROUP BY Location, Population, date
+GROUP BY Location, Population, Entry_date
 ORDER BY PercentPopulationInfected DESC;
